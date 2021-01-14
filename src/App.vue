@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <global-header :user="currentUser"></global-header>
     <column-list :list="list"></column-list>
   </div>
 </template>
@@ -7,6 +8,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import ColumnList, { ColumnProps } from './components/ColumnList.vue'
+import GlobalHeader, { UserProps } from './components/GlobalHeader.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 const testData: ColumnProps[] = [
   {
@@ -33,14 +35,19 @@ const testData: ColumnProps[] = [
     description: '这是的test2专栏，有一段非常有意思的简介，可以更新一下欧'
   }
 ]
+const currentUser: UserProps = {
+  isLogin: false
+}
 export default defineComponent({
   name: 'App',
   components: {
-    ColumnList
+    ColumnList,
+    GlobalHeader
   },
   setup () {
     return {
-      list: testData
+      list: testData,
+      currentUser
     }
   }
 })
