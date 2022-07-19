@@ -2,56 +2,60 @@
   <div class="container">
     <global-header :user="user"></global-header>
     <column-list :list="list"></column-list>
+
+    <form>
+      <div class="mb-3">
+        <label class="form-label">邮箱</label>
+        <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入" type="text"></validate-input>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">密码</label>
+        <validate-input
+          :rules="passwordRules"
+          v-model="passwordVal"
+          placeholder="请输入"
+          type="password"
+        ></validate-input>
+      </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ColumnList, { ColumnProps } from './components/ColumnList.vue';
+import ColumnList from './components/ColumnList.vue';
 import GlobalHeader, { UserProps } from './components/GlobalHeader.vue';
-
+import ValidateInput from '@/components/ValidateInput.vue';
+import { RulesProp } from './interface/RulesProp';
+import { testData } from './mock/testData';
 const currentUser: UserProps = {
   isLogin: true,
   name: 'darling'
 };
-const testData: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'test1的专栏',
-    description: '这是的test1专栏，有一段非常有意思的简介，可以更新一下欧',
-    avatar:
-      'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5ee22dd58b3c4520912b9470.jpg?x-oss-process=image/resize,m_pad,h_100,w_100'
-  },
-  {
-    id: 2,
-    title: 'test2的专栏',
-    description: '这是的test2专栏，有一段非常有意思的简介，可以更新一下欧',
-    avatar:
-      'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5ee22dd58b3c4520912b9470.jpg?x-oss-process=image/resize,m_pad,h_100,w_100'
-  },
-  {
-    id: 3,
-    title: 'test1的专栏',
-    description:
-      '这是的test1专栏，有一段非常有意思的简介，可以更新一下欧,这是的test1专栏，有一段非常有意思的简介，可以更新一下欧'
-  },
-  {
-    id: 4,
-    title: 'test2的专栏',
-    description: '这是的test2专栏，有一段非常有意思的简介，可以更新一下欧',
-    avatar:
-      'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5ee22dd58b3c4520912b9470.jpg?x-oss-process=image/resize,m_pad,h_100,w_100'
-  }
-];
 
 export default defineComponent({
   name: 'App',
-  components: { ColumnList, GlobalHeader },
+  components: { ColumnList, GlobalHeader, ValidateInput },
   setup() {
+    const emailVal = ref('darling');
+    const emailRules: RulesProp = [
+      { type: 'required', message: '电子邮箱不能为空' },
+      { type: 'email', message: '电子邮箱格式不正确' }
+    ];
+    const passwordVal = ref('');
+    const passwordRules: RulesProp = [
+      { type: 'required', message: '密码不能为空' },
+      { type: 'password', message: '请输入数字和字母组合的8-16位密码' }
+    ];
+
     return {
       list: testData,
-      user: currentUser
+      user: currentUser,
+      emailRules,
+      emailVal,
+      passwordVal,
+      passwordRules
     };
   }
 });
